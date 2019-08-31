@@ -8,24 +8,31 @@ var request = require('request');
 
 var Ingrediente = require('../models/ingrediente');
 
-/*
-function Consumir(req,res) {
+
+function IngredienteGet(req,res) {
+ //   var ingrediente= new Ingrediente();
+    var id  = req.params.id;
+
+    console.log(id);
     const options = {
-        url: 'https://www.reddit.com/r/funny.json',
+        url: 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/'+id+'/information?amount=100&unit=gram',
         method: 'GET',
         headers: {
-            'Accept': 'application/json',
-            'Accept-Charset': 'utf-8',
-            'User-Agent': 'my-reddit-client'
+            'X-RapidAPI-Host':'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',
+            'X-RapidAPI-Key': 'b6c64246d6mshc0fd2135a5928cdp1393edjsn8cf2695d839d'
         }
     };
     
-    request(options, function(err, res, body) {
+    request(options, function(_err, _res, body) {
         let json = JSON.parse(body);
-        console.log(json);
+        res.status(200).send({json})
     });
-}
-*/
+
+    
+
+} 
+
+
 function saveIngrediente(req,res) {
     var ingrediente= new Ingrediente();
     var params = req.body;
@@ -47,7 +54,7 @@ function saveIngrediente(req,res) {
             if(!ingredienteStored){
                 res.status(500).send({message: 'EL ingrediente no fue guardado'});
             }else{
-              //  Consumir(req,res);
+                Consumir(req,res);
                 res.status(200).send({ingrediente: ingredienteStored});
             }
         }
@@ -56,5 +63,6 @@ function saveIngrediente(req,res) {
 
 
 module.exports = {      //Esto es un objeto
-    saveIngrediente
+    saveIngrediente,
+    IngredienteGet
 }
